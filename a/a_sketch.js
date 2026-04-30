@@ -63,7 +63,6 @@ function draw() {
   }
 
   if (my.faces.length > 0) {
-    my.last_face_time = Date.now();
     first_mesh_check();
     check_show_hide();
     if (my.show_mesh) {
@@ -71,12 +70,14 @@ function draw() {
     } else {
       image(my.video, 0, 0);
     }
-  } else if (!my.last_face_time || Date.now() - my.last_face_time > 500) {
-    my.face_hidden = 1;
-    my.hiden_time = Date.now() / 1000;
-    image(my.video, 0, 0);
+  } else {
+    if (!my.hiden_time) my.hiden_time = Date.now() / 1000;
+    if (Date.now() / 1000 - my.hiden_time > 0.5) {
+      my.face_hidden = 1;
+      image(my.video, 0, 0);
+    }
+    // brief dropout (<0.5s): keep last frame
   }
-  // brief face dropout (<500ms): keep last frame, no update
 }
 
 function check_show_hide() {
