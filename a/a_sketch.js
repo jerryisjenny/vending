@@ -29,14 +29,20 @@ function setup() {
 }
 
 async function video_setup() {
-  await video_init();
+  // trigger camera permission dialog before initializing
+  await mediaDevices_preflight();
 
-  my.bars = new eff_bars({ width: my.video.width, height: my.video.height });
-  my.input = my.video;
-  ml5.setBackend('webgl');
-  faceMesh_init();
-  my.bestill = new eff_bestill({ factor: 10, input: my.output });
-  console.log('video_setup done');
+  my.video = createCapture({ video: { facingMode: 'user' } }, () => {
+    video_init_mask();
+    my.bars = new eff_bars({ width: my.video.width, height: my.video.height });
+    my.input = my.video;
+    ml5.setBackend('webgl');
+    faceMesh_init();
+    my.bestill = new eff_bestill({ factor: 10, input: my.output });
+    console.log('video_setup done');
+  });
+  my.video.hide();
+  my.video.size(my.vwidth, my.vheight);
 }
 
 function draw() {
