@@ -14,18 +14,18 @@ function setup() {
   my.canvas = createCanvas(windowWidth, nh);
 
   if (my.isScreen) {
-    // Screen: lower frame rate, canvas not needed for display
     frameRate(5);
+    id_tap_overlay.classList.add('hidden');
   } else {
-    video_setup();
+    id_tap_btn.addEventListener('click', () => {
+      id_tap_overlay.classList.add('hidden');
+      video_setup();
+      add_action_block(5);
+    });
   }
 
   create_ui();
   setup_dbase();
-
-  if (!my.isScreen) {
-    add_action_block(5); // delay first auto-capture on startup
-  }
 }
 
 async function video_setup() {

@@ -92,3 +92,29 @@ canvas {
   border-radius: 4px;
   margin: 2px;
 }
+
+/* ── Tap-to-start overlay (phone mode only) ── */
+
+#id_tap_overlay {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+}
+
+#id_tap_overlay.hidden {
+  display: none;
+}
+
+#id_tap_btn {
+  font-size: 1.4em;
+  padding: 18px 40px;
+  border: 2px solid #fff;
+  border-radius: 40px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
