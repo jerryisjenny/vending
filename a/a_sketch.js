@@ -64,13 +64,15 @@ function draw() {
 
   if (my.faces.length > 0) {
     first_mesh_check();
-  }
-
-  check_show_hide();
-
-  if (my.show_mesh) {
-    draw_mesh();
+    check_show_hide();
+    if (my.show_mesh) {
+      draw_mesh();
+    } else {
+      image(my.video, 0, 0);
+    }
   } else {
+    my.face_hidden = 1;
+    my.hiden_time = Date.now() / 1000;
     image(my.video, 0, 0);
   }
 }
