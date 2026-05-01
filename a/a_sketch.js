@@ -193,6 +193,27 @@ function add_action_unblock() {
   my.add_action_timeoutid = 0;
 }
 
+function capture_frames_promise(count, interval_ms) {
+  return new Promise(resolve => {
+    let frames = [];
+    let timer = setInterval(() => {
+      my.canvas.elt.toBlob(blob => {
+        frames.push(blob);
+        if (frames.length >= count) {
+          clearInterval(timer);
+          resolve(frames);
+        }
+      }, 'image/jpeg', my.imageQuality);
+    }, interval_ms);
+  });
+}
+
+function show_recording_prompt() {
+  let el = document.getElementById('id_rec_prompt');
+  el.style.display = 'flex';
+  setTimeout(() => { el.style.display = 'none'; }, 3200);
+}
+
 function audio_record(duration_ms) {
   if (!my.audioStream) return Promise.resolve(null);
   return new Promise(resolve => {

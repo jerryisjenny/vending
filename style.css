@@ -95,6 +95,18 @@ canvas {
 
 /* ── Tap-to-start overlay (phone mode only) ── */
 
+#id_rec_prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 12vw;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 #id_tap_overlay {
   display: flex;
   position: fixed;
