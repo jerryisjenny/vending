@@ -15,7 +15,11 @@ function setup() {
 
   if (my.isScreen) {
     frameRate(5);
-    id_tap_overlay.classList.add('hidden');
+    id_tap_btn.textContent = 'Start Display';
+    id_tap_btn.addEventListener('click', () => {
+      id_tap_overlay.classList.add('hidden');
+      my.audioUnlocked = true;
+    });
   } else {
     id_tap_btn.addEventListener('click', async () => {
       id_tap_overlay.classList.add('hidden');
