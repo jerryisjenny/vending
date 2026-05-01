@@ -28,10 +28,10 @@ function create_screen_ui() {
   // ADJUST left/top/width (as % of the image) to align with your vending.jpg.
   // Current defaults target a 2x2 block in rows 2-3 of a portrait machine.
   const slotPositions = [
-    { left: '21%', top: '22%', width: '24%' }, // row 2, col 1
-    { left: '42%', top: '22%', width: '24%' }, // row 2, col 2
-    { left: '21%', top: '41%', width: '24%' }, // row 3, col 1
-    { left: '42%', top: '41%', width: '24%' }, // row 3, col 2
+    { left: '21%', top: '22%', width: '22%' }, // row 2, col 1
+    { left: '43%', top: '22%', width: '22%' }, // row 2, col 2
+    { left: '21%', top: '41%', width: '22%' }, // row 3, col 1
+    { left: '43%', top: '41%', width: '22%' }, // row 3, col 2
   ];
 
   for (let i = 0; i < my.SLOT_COUNT; i++) {
