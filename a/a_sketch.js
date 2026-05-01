@@ -19,6 +19,10 @@ function setup() {
     id_tap_btn.addEventListener('click', () => {
       id_tap_overlay.classList.add('hidden');
       my.audioUnlocked = true;
+      for (let i = 0; i < my.SLOT_COUNT; i++) {
+        let slotEl = document.getElementById('slot_' + i);
+        if (slotEl && slotEl._audioUrl) slot_play_audio(slotEl);
+      }
     });
   } else {
     id_tap_btn.addEventListener('click', async () => {
