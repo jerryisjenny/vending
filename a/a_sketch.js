@@ -17,8 +17,15 @@ function setup() {
     frameRate(5);
     id_tap_overlay.classList.add('hidden');
   } else {
-    id_tap_btn.addEventListener('click', () => {
+    id_tap_btn.addEventListener('click', async () => {
       id_tap_overlay.classList.add('hidden');
+      try {
+        my.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        dbg('mic ready');
+      } catch (e) {
+        dbg('no mic: ' + e.message);
+        my.audioStream = null;
+      }
       video_setup();
       add_action_block(5);
     });
@@ -37,7 +44,9 @@ async function video_setup() {
       width: { ideal: my.vwidth },
       height: { ideal: my.vheight },
     },
+    audio: false,
   }, () => {
+    my.video.elt.muted = true;
     let vw = my.video.width || my.vwidth;
     let vh = my.video.height || my.vheight;
     dbg('video ' + vw + 'x' + vh);
@@ -183,3 +192,31 @@ function add_action_block(delay) {
 function add_action_unblock() {
   my.add_action_timeoutid = 0;
 }
+
+function audio_record(duration_ms) {
+  if (!my.audioStream) return Promise.resolve(null);
+  return new Promise(resolve => {
+    let mimeType = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg']
+      .find(t => { try { return MediaRecorder.isTypeSupported(t); } catch(e) { return false; } }) || '';
+    try {
+      let rec = new MediaRecorder(my.audioStream, mimeType ? { mimeType } : {});
+      let chunks = [];
+      rec.ondataavailable = e => e.data.size > 0 && chunks.push(e.data);
+      rec.onstop = () => resolve(new Blob(chunks, { type: rec.mimeType || mimeType || 'audio/webm' }));
+      rec.start();
+      setTimeout(() => rec.stop(), duration_ms);
+    } catch(e) {
+      dbg('rec err: ' + e.message);
+      resolve(null);
+    }
+  });
+}
+
+window.addEventListener('pagehide', () => {
+  if (my.video?.elt?.srcObject) {
+    my.video.elt.srcObject.getTracks().forEach(t => t.stop());
+  }
+  if (my.audioStream) {
+    my.audioStream.getTracks().forEach(t => t.stop());
+  }
+});
