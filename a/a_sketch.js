@@ -219,15 +219,22 @@ function show_recording_prompt() {
 }
 
 function audio_record(duration_ms) {
-  if (!my.audioStream) return Promise.resolve(null);
+  if (!my.audioStream) { dbg('audio_record: no stream'); return Promise.resolve(null); }
+  let tracks = my.audioStream.getAudioTracks();
+  dbg('audio_record tracks:' + tracks.length + ' state:' + (tracks[0]?.readyState || 'n/a'));
   return new Promise(resolve => {
     let mimeType = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg']
       .find(t => { try { return MediaRecorder.isTypeSupported(t); } catch(e) { return false; } }) || '';
+    dbg('audio mime:' + (mimeType || 'default'));
     try {
       let rec = new MediaRecorder(my.audioStream, mimeType ? { mimeType } : {});
       let chunks = [];
       rec.ondataavailable = e => e.data.size > 0 && chunks.push(e.data);
-      rec.onstop = () => resolve(new Blob(chunks, { type: rec.mimeType || mimeType || 'audio/webm' }));
+      rec.onstop = () => {
+        let blob = new Blob(chunks, { type: rec.mimeType || mimeType || 'audio/webm' });
+        dbg('audio blob:' + blob.size + 'B chunks:' + chunks.length);
+        resolve(blob);
+      };
       rec.start();
       setTimeout(() => rec.stop(), duration_ms);
     } catch(e) {
