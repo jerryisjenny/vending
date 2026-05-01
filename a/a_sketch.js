@@ -84,7 +84,6 @@ function draw() {
   my.lipsDiff = 0;
 
   if (!my.faces) {
-    if (my.video) image(my.video, 0, 0);
     return;
   }
 
@@ -93,16 +92,13 @@ function draw() {
     check_show_hide();
     if (my.show_mesh) {
       draw_mesh();
-    } else {
-      image(my.video, 0, 0);
     }
   } else {
     if (!my.hiden_time) my.hiden_time = Date.now() / 1000;
     if (Date.now() / 1000 - my.hiden_time > 0.5) {
       my.face_hidden = 1;
-      image(my.video, 0, 0);
     }
-    // brief dropout (<0.5s): keep last frame
+    // no face: keep last frame
   }
 }
 
